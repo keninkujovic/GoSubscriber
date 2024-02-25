@@ -25,8 +25,8 @@ func basicAuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 }
 
 func checkCredentials(user, pass string) bool {
-    const expectedUser = "admin"
-    const expectedPass = "password"
+    expectedUser := os.Getenv("BASIC_AUTH_USERNAME")
+    expectedPass := os.Getenv("BASIC_AUTH_PASSWORD")
     return user == expectedUser && pass == expectedPass
 }
 
