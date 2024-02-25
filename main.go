@@ -30,11 +30,6 @@ func checkCredentials(user, pass string) bool {
     return user == expectedUser && pass == expectedPass
 }
 
-
-func submitEmailHandler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprint(w, "Sending email")
-}
-
 func insertEmailHandler(w http.ResponseWriter, r *http.Request) {
     if r.Method != "POST" {
         w.WriteHeader(http.StatusMethodNotAllowed)
@@ -134,13 +129,18 @@ func initializeDB() (*mongo.Collection, error) {
     return collection, nil
 }
 
+func return404(w http.ResponseWriter, r *http.Request) {
+    w.WriteHeader(http.StatusNotFound)
+    fmt.Fprint(w, "Not Found")
+}
+
 func main() {
     _, err := initializeDB()
     if err != nil {
         log.Fatalf("Failed to initialize database: %v", err)
     }
 
-    http.HandleFunc("/", submitEmailHandler)
+    http.HandleFunc("/", return404)
     http.HandleFunc("/subscribe", insertEmailHandler)
     http.HandleFunc("/emails", basicAuthMiddleware(getAllMailsHandler))
 
