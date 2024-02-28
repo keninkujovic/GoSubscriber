@@ -148,16 +148,6 @@ func initializeDB() (*mongo.Collection, error) {
     return collection, nil
 }
 
-func getMailsAsFile(w http.ResponseWriter, r *http.Request) {
-    w.WriteHeader(http.ok)
-    w.Header().Set("Content-Type", "application/octet-stream")
-    w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, name))
-    w.Header().Set("Content-Length", len)
-    w.Header().Set("Cache-Control", "private")
-    w.Header().Set("Pragma", "private")
-
-}
-
 func return404(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusNotFound)
     fmt.Fprint(w, "Not Found")
@@ -172,7 +162,6 @@ func main() {
     http.HandleFunc("/", return404)
     http.HandleFunc("/subscribe", enableCorsMiddleware(insertEmailHandler))
     http.HandleFunc("/emails", basicAuthMiddleware(getAllMailsHandler))
-    http.HandleFunc("/emails/download/", basicAuthMiddleware(getMailsAsFile))
 
     fmt.Println("Server is listening on http://0.0.0.0:8080")
     if err := http.ListenAndServe(":8080", nil); err != nil {
