@@ -22,6 +22,7 @@ services:
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
       - BASIC_AUTH_USERNAME=admin
       - BASIC_AUTH_PASSWORD=password
+      - CORS_ALLOW_ORIGIN=http://yourdomain.com
     ports:
       - "8080:8080"
     restart: on-failure
